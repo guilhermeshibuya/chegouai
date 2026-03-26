@@ -1,8 +1,8 @@
-FROM node:lts-alpine3.23
+FROM node:20-alpine3.20
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
