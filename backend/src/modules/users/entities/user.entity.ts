@@ -1,20 +1,17 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { uuidv7 } from 'uuidv7';
-import { UserRole, UserStatus } from '../enums/user.enum';
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { UserStatus } from '../enums/user.enum';
+import { BaseEntity } from 'src/common/entities/base-entity.entity';
+import { Staff } from 'src/modules/staff/entities/staff.entity';
+import { Resident } from 'src/modules/residents/entities/resident.entity';
+import { AuditLog } from 'src/modules/audit/entities/audit-log.entity';
 
 @Entity('users')
-export class User {
-  @PrimaryColumn('uuid')
-  id: string = uuidv7();
-
+export class User extends BaseEntity {
   @Column()
   name: string;
+
+  @Column({ length: 11, unique: true })
+  cpf: string;
 
   @Column({ unique: true })
   email: string;
@@ -22,18 +19,8 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamptz', nullable: true })
-  updatedAt: Date;
-
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.RESIDENT,
-  })
-  type: UserRole;
+  @Column({ default: false })
+  isSysAdmin: boolean;
 
   @Column({
     type: 'enum',
@@ -41,4 +28,13 @@ export class User {
     default: UserStatus.PENDING,
   })
   status: UserStatus;
+
+  @OneToMany(() => Staff, (staff) => staff.user)
+  staff: Staff[];
+
+  @OneToOne(() => Resident, (resident) => resident.user)
+  resident: Resident;
+
+  @OneToMany(() => AuditLog, (auditLog) => auditLog.user)
+  auditLogs: AuditLog[];
 }

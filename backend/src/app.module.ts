@@ -4,6 +4,12 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
+import { CondominiumsModule } from './modules/condominiums/condominiums.module';
+import { StaffModule } from './modules/staff/staff.module';
+import { ResidentsModule } from './modules/residents/residents.module';
+import { PackagesModule } from './modules/packages/packages.module';
+import { PickupsModule } from './modules/pickups/pickups.module';
+import { AuditModule } from './modules/audit/audit.module';
 
 @Module({
   imports: [
@@ -28,6 +34,18 @@ import { UsersModule } from './modules/users/users.module';
     }),
 
     UsersModule,
+
+    CondominiumsModule,
+
+    StaffModule,
+
+    ResidentsModule,
+
+    PackagesModule,
+
+    PickupsModule,
+
+    AuditModule,
   ],
   controllers: [AppController],
   providers: [AppService],
