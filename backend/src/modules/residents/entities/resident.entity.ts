@@ -14,7 +14,7 @@ import { User } from 'src/modules/users/entities/user.entity';
 import { Package } from 'src/modules/packages/entities/package.entity';
 
 @Entity('residents')
-@Index(['cpf, condominium'], { unique: true })
+@Index(['cpf', 'condominium'], { unique: true })
 export class Resident extends BaseEntity {
   @Column()
   name?: string;

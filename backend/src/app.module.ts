@@ -10,6 +10,7 @@ import { ResidentsModule } from './modules/residents/residents.module';
 import { PackagesModule } from './modules/packages/packages.module';
 import { PickupsModule } from './modules/pickups/pickups.module';
 import { AuditModule } from './modules/audit/audit.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuditModule } from './modules/audit/audit.module';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         useUTC: true,
         synchronize: false,
+        logging: true,
       }),
     }),
 
@@ -46,6 +48,8 @@ import { AuditModule } from './modules/audit/audit.module';
     PickupsModule,
 
     AuditModule,
+
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
