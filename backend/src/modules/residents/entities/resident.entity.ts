@@ -28,10 +28,14 @@ export class Resident extends BaseEntity {
   @Column()
   apartment: string;
 
-  @Column()
-  block: string;
+  @Column({ nullable: true })
+  block?: string;
 
-  @Column({ type: 'enum', enum: ResidentStatus })
+  @Column({
+    type: 'enum',
+    enum: ResidentStatus,
+    default: ResidentStatus.INACTIVE,
+  })
   status: ResidentStatus;
 
   @OneToOne(() => User, { nullable: true })

@@ -1,11 +1,11 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { AuthValidationErrors } from 'src/common/constants/validation-messages';
+import { CommonValidations } from 'src/common/validations/common.validations';
 
 export class SignInUserDto {
-  @IsEmail({}, { message: AuthValidationErrors.INVALID_EMAIL })
+  @IsEmail({}, { message: CommonValidations.invalidFormat('Email') })
   email: string;
 
-  @IsString({ message: AuthValidationErrors.PASSWORD_IS_STRING })
-  @IsNotEmpty({ message: AuthValidationErrors.PASSWORD_NOT_EMPTY })
+  @IsString({ message: CommonValidations.isString('Password') })
+  @IsNotEmpty({ message: CommonValidations.notEmpty('Password') })
   password: string;
 }

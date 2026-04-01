@@ -11,6 +11,10 @@ import { PackagesModule } from './modules/packages/packages.module';
 import { PickupsModule } from './modules/pickups/pickups.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { PasswordService } from './modules/password/password.service';
+import { TokenService } from './modules/token/token.service';
+import { PasswordModule } from './modules/password/password.module';
+import { TokenModule } from './modules/token/token.module';
 
 @Module({
   imports: [
@@ -50,8 +54,12 @@ import { AuthModule } from './modules/auth/auth.module';
     AuditModule,
 
     AuthModule,
+
+    PasswordModule,
+
+    TokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PasswordService, TokenService],
 })
 export class AppModule {}

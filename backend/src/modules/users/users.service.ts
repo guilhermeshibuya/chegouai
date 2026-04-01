@@ -4,6 +4,10 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 
+import { UserStatus } from './enums/user.enum';
+import { ResidentStatus } from '../residents/enums/resident.enum';
+import { UserExceptions } from './users.exceptions';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -22,5 +26,16 @@ export class UsersService {
 
   async findOneByEmail(email: string) {
     return this.usersRepository.findOneBy({ email });
+  }
+
+  async approveUser(id: string) {
+    const user = await this.usersRepository.findOneBy({ id });
+
+    if (!user) throw UserExceptions.userNotFound();
+
+    user.status = UserStatus.ACTIVE;
+    user.resident.status = ResidentStatus.ACTIVE;
+
+    return this.usersRepository.save(user);
   }
 }

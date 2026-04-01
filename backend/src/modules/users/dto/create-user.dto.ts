@@ -1,22 +1,23 @@
 import { IsEmail, IsString, Matches, MinLength } from 'class-validator';
-import { AuthValidationErrors } from 'src/common/constants/validation-messages';
+import { CommonValidations } from 'src/common/validations/common.validations';
+import { NameValidations } from 'src/common/validations/name.validations';
 
 export class CreateUserDto {
-  @IsString({ message: AuthValidationErrors.NAME_IS_STRING })
+  @IsString({ message: NameValidations.isString })
   @MinLength(2, {
-    message: AuthValidationErrors.NAME_MIN_LENGTH,
+    message: NameValidations.minLength,
   })
   @Matches(/^[a-zA-Z\s]+$/, {
-    message: AuthValidationErrors.NAME_ONLY_LETTERS_AND_SPACES,
+    message: NameValidations.onlyLettersAndSpaces,
   })
   name: string;
 
-  @IsEmail({}, { message: AuthValidationErrors.INVALID_EMAIL })
+  @IsEmail({}, { message: CommonValidations.invalidFormat('Email') })
   email: string;
 
-  @IsString({ message: AuthValidationErrors.PASSWORD_IS_STRING })
+  @IsString({ message: CommonValidations.isString('Password') })
   @MinLength(6, {
-    message: AuthValidationErrors.PASSWORD_MIN_LENGTH,
+    message: CommonValidations.minLength('Password', 6),
   })
   password: string;
 }
