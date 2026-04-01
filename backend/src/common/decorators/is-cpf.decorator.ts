@@ -1,10 +1,12 @@
 import {
   registerDecorator,
   ValidationOptions,
+  ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { cpf } from 'cpf-cnpj-validator';
 
+@ValidatorConstraint({ name: 'isCpf', async: false })
 export class IsCpfConstraint implements ValidatorConstraintInterface {
   validate(value: string): boolean {
     return typeof value === 'string' && cpf.isValid(value);

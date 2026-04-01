@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsString,
   IsUUID,
+  Length,
   Matches,
   MaxLength,
   MinLength,
@@ -13,6 +14,7 @@ import { CpfValidations } from 'src/common/validations/cpf.validations';
 import { PhoneValidations } from 'src/common/validations/phone.validations';
 import { IsCpf } from 'src/common/decorators/is-cpf.decorator';
 import { CommonValidations } from 'src/common/validations/common.validations';
+import { OnlyNumbers } from 'src/common/transformers/only-numbers.transform';
 
 export class CreateResidentDto {
   @IsString({ message: NameValidations.isString })
@@ -23,10 +25,13 @@ export class CreateResidentDto {
   })
   name: string;
 
+  @OnlyNumbers()
   @IsNotEmpty({ message: CpfValidations.notEmpty })
+  @Length(11, 11, { message: CpfValidations.length })
   @IsCpf({ message: CpfValidations.invalidFormat })
   cpf: string;
 
+  @OnlyNumbers()
   @IsString({ message: PhoneValidations.isString })
   @MinLength(10, { message: PhoneValidations.minLength })
   @MaxLength(11, { message: PhoneValidations.maxLength })

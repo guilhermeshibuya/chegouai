@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Length,
   Matches,
   MaxLength,
   MinLength,
@@ -11,12 +12,16 @@ import { CpfValidations } from 'src/common/validations/cpf.validations';
 import { IsCpf } from 'src/common/decorators/is-cpf.decorator';
 import { PhoneValidations } from 'src/common/validations/phone.validations';
 import { CommonValidations } from 'src/common/validations/common.validations';
+import { OnlyNumbers } from 'src/common/transformers/only-numbers.transform';
 
 export class CreateUserResidentDto extends CreateUserDto {
+  @OnlyNumbers()
   @IsNotEmpty({ message: CpfValidations.notEmpty })
+  @Length(11, 11, { message: CpfValidations.length })
   @IsCpf({ message: CpfValidations.invalidFormat })
   cpf: string;
 
+  @OnlyNumbers()
   @IsString({ message: PhoneValidations.isString })
   @IsNotEmpty({ message: PhoneValidations.notEmpty })
   @MinLength(10, {

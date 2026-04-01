@@ -11,8 +11,6 @@ import { PackagesModule } from './modules/packages/packages.module';
 import { PickupsModule } from './modules/pickups/pickups.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { PasswordService } from './modules/password/password.service';
-import { TokenService } from './modules/token/token.service';
 import { PasswordModule } from './modules/password/password.module';
 import { TokenModule } from './modules/token/token.module';
 
@@ -60,6 +58,6 @@ import { TokenModule } from './modules/token/token.module';
     TokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PasswordService, TokenService],
+  providers: [AppService],
 })
 export class AppModule {}
