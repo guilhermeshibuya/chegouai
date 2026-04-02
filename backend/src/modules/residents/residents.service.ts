@@ -6,6 +6,7 @@ import { UpdateResidentDto } from './dto/update-resident.dto';
 import { CreateResidentDto } from './dto/create-resident.dto';
 import { Condominium } from '../condominiums/entities/condominium.entity';
 import { ResidentExceptions } from './residents.exceptions';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ResidentsService {
@@ -36,6 +37,7 @@ export class ResidentsService {
     const resident = this.residentsRepository.create({
       ...createResidentDto,
       condominium: { id: createResidentDto.condominiumId },
+      user: { id: createResidentDto.userId },
     });
     return this.residentsRepository.save(resident);
   }
@@ -44,7 +46,6 @@ export class ResidentsService {
     const resident = await this.residentsRepository.findOneBy({
       id: residentId,
     });
-
     if (!resident) throw ResidentExceptions.residentNotFound();
 
     Object.assign(resident, updateResidentDto);
@@ -53,6 +54,12 @@ export class ResidentsService {
       resident.condominium = {
         id: updateResidentDto.condominiumId,
       } as Condominium;
+    }
+
+    if (updateResidentDto.userId) {
+      resident.user = {
+        id: updateResidentDto.userId,
+      } as User;
     }
 
     return this.residentsRepository.save(resident);

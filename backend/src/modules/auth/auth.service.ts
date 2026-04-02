@@ -76,6 +76,7 @@ export class AuthService {
     const condominium = await this.validateCondominiumExists(
       dto.condominiumCode,
     );
+
     const user = await this.createUser(dto, email);
     const resident = await this.upsertResident(dto, user.id, condominium.id);
 
