@@ -21,7 +21,10 @@ export class UsersService {
   }
 
   async findOneById(id: string) {
-    return this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOne({
+      where: { id },
+      relations: ['resident', 'resident.condominium'],
+    });
   }
 
   async findOneByEmail(email: string) {

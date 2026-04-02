@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -15,5 +16,15 @@ export class AuthExceptions {
 
   static condominiumNotFound() {
     return new NotFoundException('Condominium not found');
+  }
+
+  static userUnauthorized() {
+    return new UnauthorizedException('User not authorized');
+  }
+
+  static forbidden() {
+    return new ForbiddenException(
+      'You do not have permission to access this resource',
+    );
   }
 }

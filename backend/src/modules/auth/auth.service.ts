@@ -97,10 +97,10 @@ export class AuthService {
     );
     if (!passwordMatches) throw AuthExceptions.invalidCredentials();
 
-    const token = await this.tokenService.generateAccessToken(
-      user.id,
-      user.email,
-    );
+    const token = await this.tokenService.generateAccessToken({
+      sub: user.id,
+      email: user.email,
+    });
 
     return { access_token: token };
   }
