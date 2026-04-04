@@ -13,17 +13,17 @@ export class UsersService {
 
   async create(user: CreateUserDto) {
     const newUser = this.usersRepository.create(user);
-    return this.usersRepository.save(newUser);
+    return await this.usersRepository.save(newUser);
   }
 
   async findOneById(id: string) {
-    return this.usersRepository.findOne({
+    return await this.usersRepository.findOne({
       where: { id },
       relations: ['resident', 'resident.condominium'],
     });
   }
 
   async findOneByEmail(email: string) {
-    return this.usersRepository.findOneBy({ email });
+    return await this.usersRepository.findOneBy({ email });
   }
 }

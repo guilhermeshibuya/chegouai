@@ -19,11 +19,11 @@ export class CondominiumsService {
   }
 
   async findAll() {
-    return this.condominiumsRepository.find();
+    return await this.condominiumsRepository.find();
   }
 
   async findOneByCode(code: string) {
-    return this.condominiumsRepository.findOneBy({ code });
+    return await this.condominiumsRepository.findOneBy({ code });
   }
 
   async create(createCondominiumDto: CreateCondominiumDto) {
@@ -48,6 +48,6 @@ export class CondominiumsService {
       code,
     });
 
-    return this.condominiumsRepository.save(newCondo);
+    return await this.condominiumsRepository.save(newCondo);
   }
 }

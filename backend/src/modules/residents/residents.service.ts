@@ -15,6 +15,10 @@ export class ResidentsService {
     private residentsRepository: Repository<Resident>,
   ) {}
 
+  async findAll() {
+    return await this.residentsRepository.find();
+  }
+
   async findResidentByCondominium({
     cpf,
     condominiumId,
@@ -24,7 +28,7 @@ export class ResidentsService {
     condominiumId: string;
     apartment: string;
   }) {
-    return this.residentsRepository.findOne({
+    return await this.residentsRepository.findOne({
       where: {
         cpf,
         condominium: { id: condominiumId },
@@ -39,7 +43,7 @@ export class ResidentsService {
       condominium: { id: createResidentDto.condominiumId },
       user: { id: createResidentDto.userId },
     });
-    return this.residentsRepository.save(resident);
+    return await this.residentsRepository.save(resident);
   }
 
   async update(residentId: string, updateResidentDto: UpdateResidentDto) {
@@ -62,6 +66,6 @@ export class ResidentsService {
       } as User;
     }
 
-    return this.residentsRepository.save(resident);
+    return await this.residentsRepository.save(resident);
   }
 }

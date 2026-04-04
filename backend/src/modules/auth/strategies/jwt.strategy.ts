@@ -40,6 +40,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         email,
         name,
         role: Role.SYS_ADMIN,
+        residentId: null,
         condominiumId: null,
         staffId: null,
       };
@@ -58,6 +59,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         email,
         name,
         role,
+        residentId: null,
         condominiumId: staff.condominium.id,
         staffId: staff.id,
       };
@@ -68,6 +70,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       email,
       name,
       role: Role.RESIDENT,
+      residentId: user.resident?.id ?? null,
       condominiumId: user.resident?.condominium?.id ?? null,
       staffId: null,
     };
