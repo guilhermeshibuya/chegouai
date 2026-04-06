@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Resident } from './entities/resident.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { UpdateResidentDto } from './dto/update-resident.dto';
 import { CreateResidentDto } from './dto/create-resident.dto';
 import { Condominium } from '../condominiums/entities/condominium.entity';
 import { ResidentExceptions } from './residents.exceptions';
 import { User } from '../users/entities/user.entity';
+import { GetResidentsFilterDto } from './dto/get-residents-filter.dto';
 
 @Injectable()
 export class ResidentsService {
@@ -17,6 +18,21 @@ export class ResidentsService {
 
   async findAll() {
     return await this.residentsRepository.find();
+  }
+
+  async findByCondominiumFilter(
+    condominiumId: string,
+    filterDto: GetResidentsFilterDto,
+  ) {
+    const { name, apartment } = filterDto;
+
+    return await this.residentsRepository.find({
+      where: {
+        ...(name && { name: ILike(`${name}%`) }),
+        ...(apartment && { apartment: ILike(`${apartment}%`) }),
+        condominium: { id: condominiumId },
+      },
+    });
   }
 
   async findResidentByCondominium({
@@ -34,6 +50,7 @@ export class ResidentsService {
         condominium: { id: condominiumId },
         apartment,
       },
+      relations: ['user'],
     });
   }
 
@@ -65,6 +82,17 @@ export class ResidentsService {
         id: updateResidentDto.userId,
       } as User;
     }
+
+    return await this.residentsRepository.save(resident);
+  }
+
+  async linkUser(residentId: string, userId: string) {
+    const resident = await this.residentsRepository.findOneBy({
+      id: residentId,
+    });
+    if (!resident) throw ResidentExceptions.residentNotFound();
+
+    resident.user = { id: userId } as User;
 
     return await this.residentsRepository.save(resident);
   }

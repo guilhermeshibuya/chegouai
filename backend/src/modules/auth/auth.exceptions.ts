@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   NotFoundException,
   UnauthorizedException,
@@ -25,6 +26,12 @@ export class AuthExceptions {
   static forbidden() {
     return new ForbiddenException(
       'You do not have permission to access this resource',
+    );
+  }
+
+  static residentAlreadyLinked() {
+    return new ConflictException(
+      'CPF already linked to another user in this condominium',
     );
   }
 }

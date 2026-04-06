@@ -62,9 +62,11 @@ export class AuthService {
         apartment: dto.apartment,
       });
 
-    return existingResident
-      ? this.residentsService.update(existingResident.id, residentData)
-      : this.residentsService.create(residentData);
+    if (!existingResident) return this.residentsService.create(residentData);
+
+    if (existingResident.user) throw AuthExceptions.residentAlreadyLinked();
+
+    return this.residentsService.linkUser(existingResident.id, userId);
   }
 
   async register(

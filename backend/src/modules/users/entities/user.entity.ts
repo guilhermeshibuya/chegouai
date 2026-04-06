@@ -22,6 +22,9 @@ export class User extends BaseEntity {
   @Column({ default: false })
   isSysAdmin: boolean;
 
+  @Column({ nullable: true })
+  profilePictureUrl?: string;
+
   @Column({
     type: 'enum',
     enum: UserStatus,
