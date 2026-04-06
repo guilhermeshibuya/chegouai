@@ -8,8 +8,6 @@ import { PasswordModule } from '../password/password.module';
 import { TokenModule } from '../token/token.module';
 import { StaffModule } from '../staff/staff.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { RolesGuard } from './guards/roles.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -21,11 +19,6 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     StaffModule,
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    { provide: 'APP_GUARD', useClass: JwtAuthGuard },
-    { provide: 'APP_GUARD', useClass: RolesGuard },
-  ],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

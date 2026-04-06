@@ -13,6 +13,10 @@ import { AuditModule } from './modules/audit/audit.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { PasswordModule } from './modules/password/password.module';
 import { TokenModule } from './modules/token/token.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -37,6 +41,17 @@ import { TokenModule } from './modules/token/token.module';
       }),
     }),
 
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: Number(configService.get('THROTTLE_TTL')),
+          limit: Number(configService.get('THROTTLE_LIMIT')),
+        },
+      ],
+    }),
+
     UsersModule,
 
     CondominiumsModule,
@@ -58,6 +73,11 @@ import { TokenModule } from './modules/token/token.module';
     TokenModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
+  ],
 })
 export class AppModule {}
