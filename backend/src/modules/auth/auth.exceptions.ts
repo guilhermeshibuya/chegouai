@@ -34,4 +34,10 @@ export class AuthExceptions {
       'CPF already linked to another user in this condominium',
     );
   }
+
+  static condoAdminAlreadyExists() {
+    return new ConflictException(
+      'This condominium already has an admin registered',
+    );
+  }
 }

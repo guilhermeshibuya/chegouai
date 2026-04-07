@@ -12,40 +12,48 @@ export class CondominiumsService {
     private condominiumsRepository: Repository<Condominium>,
   ) {}
 
-  generateCondominiumCode(): string {
-    const LENGTH = 6;
+  private async generateUniqueCode(
+    field: keyof Condominium,
+    length = 6,
+  ): Promise<string> {
+    let isUnique = false;
+    let code = '';
 
-    return nanoid(LENGTH).toUpperCase();
+    while (!isUnique) {
+      code = nanoid(length).toUpperCase();
+
+      const existing = await this.condominiumsRepository.findOneBy({
+        [field]: code,
+      });
+
+      if (!existing) isUnique = true;
+    }
+    return code;
   }
 
   async findAll() {
     return await this.condominiumsRepository.find();
   }
 
-  async findOneByCode(code: string) {
-    return await this.condominiumsRepository.findOneBy({ code });
+  // async findOneByCode(code: string) {
+  //   return await this.condominiumsRepository.findOneBy({ code });
+  // }
+
+  async findOneByField(field: keyof Condominium, value: string) {
+    return await this.condominiumsRepository.findOneBy({ [field]: value });
   }
 
   async create(createCondominiumDto: CreateCondominiumDto) {
     const { name, cnpj } = createCondominiumDto;
 
-    let isUnique = false;
-    let code = '';
-
-    while (!isUnique) {
-      code = this.generateCondominiumCode();
-
-      const existingCondo = await this.condominiumsRepository.findOneBy({
-        code,
-      });
-
-      if (!existingCondo) isUnique = true;
-    }
+    const condominiumCode = await this.generateUniqueCode('code', 6);
+    const adminToken = await this.generateUniqueCode('adminToken', 8);
 
     const newCondo = this.condominiumsRepository.create({
       name,
       cnpj,
-      code,
+      code: condominiumCode,
+      adminToken,
     });
 
     return await this.condominiumsRepository.save(newCondo);

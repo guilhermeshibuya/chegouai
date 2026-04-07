@@ -5,6 +5,7 @@ import { CreateUserResidentDto } from '../users/dto/create-user-resident.dto';
 import { Public } from './decorators/public.decorator';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { SignInResponseDto } from './dto/auth-response.dto';
+import { CreateUserCondoAdminDto } from '../users/dto/create-user-condo-admin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,6 +19,14 @@ export class AuthController {
   })
   async register(@Body() createUserResidentDto: CreateUserResidentDto) {
     return this.authService.register(createUserResidentDto);
+  }
+
+  @Public()
+  @Post('register/admin')
+  async registerCondominiumAdmin(
+    @Body() createCondoAdminDto: CreateUserCondoAdminDto,
+  ) {
+    return this.authService.registerCondominiumAdmin(createCondoAdminDto);
   }
 
   @Public()

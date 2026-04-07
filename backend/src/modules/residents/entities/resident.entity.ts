@@ -19,7 +19,7 @@ export class Resident extends BaseEntity {
   @Column()
   name?: string;
 
-  @Column()
+  @Column({ length: 11 })
   cpf: string;
 
   @Column({ length: 11 })

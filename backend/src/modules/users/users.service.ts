@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserStatus } from './enums/user.enum';
+import { UserExceptions } from './users.exceptions';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +18,11 @@ export class UsersService {
     return await this.usersRepository.save(newUser);
   }
 
+  async createWithStatus(user: CreateUserDto, status: UserStatus) {
+    const newUser = this.usersRepository.create({ ...user, status });
+    return await this.usersRepository.save(newUser);
+  }
+
   async findOneById(id: string) {
     return await this.usersRepository.findOne({
       where: { id },
@@ -25,5 +32,15 @@ export class UsersService {
 
   async findOneByEmail(email: string) {
     return await this.usersRepository.findOneBy({ email });
+  }
+
+  async activateUser(userId: string) {
+    const result = await this.usersRepository.update(
+      { id: userId },
+      { status: UserStatus.ACTIVE },
+    );
+    if (result.affected === 0) throw UserExceptions.userNotFound();
+
+    return await this.usersRepository.findOneBy({ id: userId });
   }
 }

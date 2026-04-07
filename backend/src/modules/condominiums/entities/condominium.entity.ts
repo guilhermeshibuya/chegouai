@@ -17,6 +17,9 @@ export class Condominium extends BaseEntity {
   @Column({ length: 14, unique: true })
   cnpj: string;
 
+  @Column({ unique: true, nullable: true })
+  adminToken: string;
+
   @OneToMany(() => Staff, (staff) => staff.condominium)
   staff: Staff[];
 

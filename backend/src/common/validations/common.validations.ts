@@ -11,4 +11,5 @@ export const CommonValidations = {
   onlyLettersAndSpaces: (field: string) =>
     `${field} should contain only letters and spaces`,
   onlyNumbers: (field: string) => `${field} should contain only numbers`,
+  isEnum: (field: string) => `${field} must be a valid enum value`,
 } as const;

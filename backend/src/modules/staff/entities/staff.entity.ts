@@ -2,6 +2,7 @@ import { User } from 'src/modules/users/entities/user.entity';
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -14,6 +15,7 @@ import { Pickup } from 'src/modules/pickups/entities/pickup.entity';
 import { Package } from 'src/modules/packages/entities/package.entity';
 
 @Entity('staff')
+@Index(['cpf', 'condominium'], { unique: true })
 export class Staff {
   @PrimaryColumn('uuid')
   id: string = uuidv7();
@@ -28,6 +30,9 @@ export class Staff {
 
   @Column({ type: 'enum', enum: StaffRole })
   role: StaffRole;
+
+  @Column({ length: 11 })
+  cpf: string;
 
   @Column({ length: 11 })
   phone: string;
