@@ -15,12 +15,14 @@ import { PhoneValidations } from 'src/common/validations/phone.validations';
 import { IsCpf } from 'src/common/decorators/is-cpf.decorator';
 import { CommonValidations } from 'src/common/validations/common.validations';
 import { OnlyNumbers } from 'src/common/transformers/only-numbers.transform';
+import { ONLY_NUMBERS_REGEX } from 'src/common/regex/only-numbers';
+import { ONLY_LETTERS_AND_SPACES_REGEX } from 'src/common/regex/only-letters-spaces';
 
 export class CreateResidentDto {
   @IsString({ message: NameValidations.isString })
   @MinLength(2, { message: NameValidations.minLength })
   @IsNotEmpty({ message: NameValidations.notEmpty })
-  @Matches(/^[a-zA-Z\s]+$/, {
+  @Matches(ONLY_LETTERS_AND_SPACES_REGEX, {
     message: NameValidations.onlyLettersAndSpaces,
   })
   name: string;
@@ -36,7 +38,7 @@ export class CreateResidentDto {
   @MinLength(10, { message: PhoneValidations.minLength })
   @MaxLength(11, { message: PhoneValidations.maxLength })
   @IsNotEmpty({ message: PhoneValidations.notEmpty })
-  @Matches(/^\d+$/, { message: PhoneValidations.onlyNumbers })
+  @Matches(ONLY_NUMBERS_REGEX, { message: PhoneValidations.onlyNumbers })
   phone: string;
 
   @IsString({ message: CommonValidations.isString('apartment') })
