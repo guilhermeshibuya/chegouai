@@ -145,6 +145,9 @@ export class AuthService {
     );
     if (!passwordMatches) throw AuthExceptions.invalidCredentials();
 
+    const isUserActive = user.status === UserStatus.ACTIVE;
+    if (!isUserActive) throw AuthExceptions.inactiveUser();
+
     const token = await this.tokenService.generateAccessToken({
       sub: user.id,
       email: user.email,

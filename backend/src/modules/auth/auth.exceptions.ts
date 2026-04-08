@@ -40,4 +40,8 @@ export class AuthExceptions {
       'This condominium already has an admin registered',
     );
   }
+
+  static inactiveUser() {
+    return new ForbiddenException('User account is not active');
+  }
 }
