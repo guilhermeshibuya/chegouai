@@ -5,10 +5,14 @@ import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { AuthenticatedUserResponseDto } from '../auth/dto/authenticated-user-response.dto';
 import { Role } from '../auth/enums/role.enum';
+import { CondominiumsService } from '../condominiums/condominiums.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly condominiumsService: CondominiumsService,
+  ) {}
 
   @Get('me')
   @ApiOkResponse({
@@ -26,5 +30,11 @@ export class UsersController {
   })
   getMe(@CurrentUser() user: AuthenticatedUser) {
     return user;
+  }
+
+  @Get('me/condominium')
+  getMyCondominium(@CurrentUser() user: AuthenticatedUser) {
+    if (!user.condominiumId) return null;
+    return this.condominiumsService.findOneByField('id', user.condominiumId);
   }
 }

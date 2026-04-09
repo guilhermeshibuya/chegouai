@@ -8,6 +8,9 @@ import { Condominium } from '../condominiums/entities/condominium.entity';
 import { ResidentExceptions } from './residents.exceptions';
 import { User } from '../users/entities/user.entity';
 import { GetResidentsFilterDto } from './dto/get-residents-filter.dto';
+import { AuthenticatedUser } from '../auth/types/authenticated-user.type';
+import { Role } from '../auth/enums/role.enum';
+import { ResidentStatus } from './enums/resident.enum';
 
 @Injectable()
 export class ResidentsService {
@@ -18,6 +21,23 @@ export class ResidentsService {
 
   async findAll() {
     return await this.residentsRepository.find();
+  }
+
+  async findWithScope(user: AuthenticatedUser, filter: GetResidentsFilterDto) {
+    const { name, apartment } = filter;
+
+    if (user.role === Role.SYS_ADMIN) {
+      return await this.residentsRepository.find({
+        where: {
+          ...(name && { name: ILike(`${name}%`) }),
+          ...(apartment && { apartment: ILike(`${apartment}%`) }),
+        },
+      });
+    }
+
+    if (!user.condominiumId) return [];
+
+    return await this.findByCondominiumFilter(user.condominiumId, filter);
   }
 
   async findByCondominiumFilter(
@@ -95,5 +115,14 @@ export class ResidentsService {
     resident.user = { id: userId } as User;
 
     return await this.residentsRepository.save(resident);
+  }
+
+  async approve(residentId: string) {
+    const result = await this.residentsRepository.update(
+      { id: residentId },
+      { status: ResidentStatus.ACTIVE },
+    );
+
+    if (result.affected === 0) throw ResidentExceptions.residentNotFound();
   }
 }

@@ -19,7 +19,7 @@ export class CondominiumsController {
     return this.condominiumsService.create(createCondominiumDto);
   }
 
-  @Roles(Role.SYS_ADMIN, Role.CONDO_ADMIN, Role.DOORPERSON)
+  @Roles(Role.SYS_ADMIN)
   @Get(':id/residents')
   async findResidents(
     @Param('id') id: string,
