@@ -34,7 +34,7 @@ export class Resident extends BaseEntity {
   @Column({
     type: 'enum',
     enum: ResidentStatus,
-    default: ResidentStatus.INACTIVE,
+    default: ResidentStatus.PENDING,
   })
   status: ResidentStatus;
 

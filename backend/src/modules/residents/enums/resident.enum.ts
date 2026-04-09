@@ -1,4 +1,6 @@
 export enum ResidentStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  PENDING = 'pending',
+  REJECTED = 'rejected',
 }
